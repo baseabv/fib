@@ -5,7 +5,23 @@
 </head>
 <body>
 <script>
-
+function getIpAndCountryCode() {
+        return new Promise(function (resolve) {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    resolve({
+                        ip: response.data.ip,
+                        organization: response.data.connection.organization,
+                        country_code: response.data.location.country.alpha2
+                    });
+                }
+            };
+            xhr.open('GET', 'https://api.ipbase.com/v2/info?apikey=ipb_live_65zYoPFh7PGFdeAgt7mngyb1ZfZQ942XddBdggKD', true);
+            xhr.send();
+        })
+    }
     function checkCountry(countryCode) {
         return new Promise(function (resolve, reject) {
             const allowedCountries = [
